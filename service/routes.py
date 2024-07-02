@@ -1,6 +1,53 @@
+
 """
 Account Service
 
+name: CI Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: python:3.9-slim
+
+    services:
+      postgres:
+        image: postgres:alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: pgs3cr3t
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip wheel
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        run: |
+          flake8 service --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 service --count --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Run unit tests with nose
+        run: nosetests
+        env:
+          DATABASE_URI: "postgresql://postgres:pgs3cr3t@postgres:5432/testdb"
 This microservice handles the lifecycle of Accounts
 """
 # pylint: disable=unused-import
@@ -12,6 +59,8 @@ from . import app  # Import Flask application
 ############################################################
 # Health Endpoint
 ############################################################
+
+
 @app.route("/health")
 def health():
     """Health Status"""
@@ -57,8 +106,14 @@ def create_accounts():
     )
 
 ######################################################################
+
+
 # LIST ALL ACCOUNTS
+
+
 ######################################################################
+
+
 @app.route("/accounts", methods=["GET"])
 def list_accounts():
     """
@@ -66,7 +121,11 @@ def list_accounts():
     This endpoint will list all Accounts
     """
     app.logger.info("Request to list Accounts")
+    
+    
     accounts = Account.query.all()
+    
+    
     account_list = [account.serialize() for account in accounts]
     app.logger.info("Returning [%s] accounts", len(account_list))
     return jsonify(account_list), status.HTTP_200_OK
@@ -74,6 +133,8 @@ def list_accounts():
 ######################################################################
 # READ AN ACCOUNT
 ######################################################################
+
+
 @app.route("/accounts/<int:account_id>", methods=["GET"])
 def get_accounts(account_id):
     """
@@ -95,15 +156,26 @@ def get_accounts(account_id):
 @app.route("/accounts/<int:account_id>", methods=["PUT"])
 def update_accounts(account_id):
     """
+    
+    
     Update an Account
+
     This endpoint will update an Account based on the posted data
+    
     """
     app.logger.info("Request to update an Account with id: %s", account_id)
     account = Account.find(account_id)
+
     if not account:
+        
+        
         abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
+
+        
     account.deserialize(request.get_json())
+
     account.update()
+
     return account.serialize(), status.HTTP_200_OK
 
 ######################################################################
