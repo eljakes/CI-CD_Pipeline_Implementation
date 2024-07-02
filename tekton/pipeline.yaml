@@ -6,7 +6,43 @@
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
-metadata:  
+metadata:
+  name: cd-pipeline
+spec:
+  params:
+    - name: repo-url
+      type: string
+      description: The URL of the git repository
+    - name: branch
+      type: string
+      description: The branch of the git repository
+  workspaces:
+    - name: pipeline-workspace
+  tasks:
+    - name: clone
+      workspaces:
+        - name: output
+          workspace: pipeline-workspace
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.branch)
+    - name: lint
+      workspaces:
+        - name: source
+          workspace: pipeline-workspace
+      taskRef:
+        name: flake8
+      params:
+        - name: image
+          value: "python:3.9-slim"
+        - name: args
+          value: ["--count", "--max-complexity=10", "--max-line-length=127", "--statistics"]
+      runAfter:
+        - clone
     - name: tests
       workspaces:
         - name: source
@@ -14,9 +50,9 @@ metadata:
       taskRef:
         name: nose
       params:
-      - name: database_uri
-        value: "sqlite:///test.db"
-      - name: args
-        value: "-v --with-spec --spec-color"
+        - name: database_uri
+          value: "sqlite:///test.db"
+        - name: args
+          value: ["-v", "--with-spec", "--spec-color"]
       runAfter:
         - clone
