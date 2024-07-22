@@ -1,66 +1,22 @@
-# DevOps Capstone Template
+# DevOps Project Summary: CI/CD Pipeline Implementation for Microservices
+# Project Overview:
+This project focused on developing and implementing a CI/CD pipeline for a microservices-based application using GitHub Actions for continuous integration (CI) and OpenShift Pipelines for continuous delivery (CD). The project aimed to streamline the development, testing, and deployment processes, ensuring efficient and reliable software delivery.
 
-![Build Status](https://github.com/eljakes/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)
+# Project Goals:
 
+    Automate the Build Process: Use GitHub Actions to automate the build process, ensuring code is compiled, tested, and packaged efficiently.
+    Continuous Integration: Integrate automated testing to catch issues early in the development cycle.
+    Continuous Delivery: Use OpenShift Pipelines to automate the deployment process, ensuring seamless delivery of updates to production.
+    Scalability and Reliability: Ensure the pipeline is scalable to handle multiple microservices and robust to maintain high availability.
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Python 3.9](https://img.shields.io/badge/Python-3.9-green.svg)](https://shields.io/)
+# Tools and Technologies:
 
-This repository contains the starter code for the project in [**IBM-CD0285EN-SkillsNetwork DevOps Capstone Project**](https://www.coursera.org/learn/devops-capstone-project?specialization=devops-and-software-engineering) which is part of the [**IBM DevOps and Software Engineering Professional Certificate**](https://www.coursera.org/professional-certificates/devops-and-software-engineering)
-
-## Usage
-
-You should use this template to start your DevOps Capstone project. It contains all of the code that you will need to get started.
-
-Do Not fork this code! It is meant to be used by pressing the  <span style=color:white;background:green>**Use this Template**</span> button in GitHub. This will copy the code to your own repository with no connection back to the original repository like a fork would. This is what you want.
-
-## Development Environment
-
-These labs are designed to be executed in the IBM Developer Skills Network Cloud IDE with OpenShift. Please use the links provided in the Coursera Capstone project to access the lab environment.
-
-Once you are in the lab environment, you can initialize it with `bin/setup.sh` by sourcing it. (*Note: DO NOT run this program as a bash script. It sets environment variable and so must be sourced*):
-
-```bash
-source bin/setup.sh
-```
-
-This will install Python 3.9, make it the default, modify the bash prompt, create a Python virtual environment and activate it.
-
-After sourcing it you prompt should look like this:
-
-```bash
-(venv) theia:project$
-```
-
-## Useful commands
-
-Under normal circumstances you should not have to run these commands. They are performed automatically at setup but may be useful when things go wrong:
-
-### Activate the Python 3.9 virtual environment
-
-You can activate the Python 3.9 environment with:
-
-```bash
-source ~/venv/bin/activate
-```
-
-### Installing Python dependencies
-
-These dependencies are installed as part of the setup process but should you need to install them again, first make sure that the Python 3.9 virtual environment is activated and then use the `make install` command:
-
-```bash
-make install
-```
-
-### Starting the Postgres Docker container
-
-The labs use Postgres running in a Docker container. If for some reason the service is not available you can start it with:
-
-```bash
-make db
-```
-
-You can use the `docker ps` command to make sure that postgres is up and running.
+    GitHub Actions: For automating the CI process, including building, testing, and packaging the application.
+    OpenShift Pipelines: For automating the CD process, deploying applications to the OpenShift environment.
+    Docker: For containerizing the microservices.
+    Kubernetes/OpenShift: For orchestrating the deployment and scaling of the microservices.
+    PostgreSQL: As the database service deployed in OpenShift.
+    Flake8 and nosetests: For code quality checks and test coverage analysis.
 
 ## Project layout
 
@@ -93,44 +49,65 @@ The Account model contains the following fields:
 | phone_number | String(32) | True |
 | date_joined | Date | False |
 
-## Your Task
+# Project Implementation Steps:
 
-Complete this microservice by implementing REST API's for `READ`, `UPDATE`, `DELETE`, and `LIST` while maintaining **95%** code coverage. In true **Test Driven Development** fashion, first write tests for the code you "wish you had", and then write the code to make them pass.
+    Repository Setup:
+        Created GitHub repositories for each microservice.
+        Set up branch protection rules and required status checks to enforce quality standards.
 
-## Local Kubernetes Development
+    CI Pipeline Configuration:
+        Configured GitHub Actions workflows to automate the build and test processes.
+        Implemented Flake8 for linting and nosetests for unit tests to ensure code quality.
+        Configured workflows to trigger on pull requests and merges to the main branch.
 
-This repo can also be used for local Kubernetes development. It is not advised that you run these commands in the Cloud IDE environment. The purpose of these commands are to simulate the Cloud IDE environment locally on your computer. 
+    CD Pipeline Configuration:
+        Developed OpenShift Pipelines to automate the deployment process.
+        Created YAML files for pipeline definitions, including tasks for building Docker images, pushing to IBM Cloud Container Registry, and deploying to OpenShift.
+        Set up pipeline triggers to initiate deployments upon successful completion of CI workflows.
 
-At a minimum, you will need [Docker Desktop](https://www.docker.com/products/docker-desktop) installed on your computer. For the full development environment, you will also need [Visual Studio Code](https://code.visualstudio.com) with the [Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension from the Visual Studio Marketplace. All of these can be installed manually by clicking on the links above or you can use a package manager like **Homebrew** on Mac of **Chocolatey** on Windows.
+    Containerization:
+        Dockerized each microservice with appropriate Dockerfiles.
+        Ensured consistent environment setup across development, staging, and production.
 
-Please only use these commands for working stand-alone on your own computer with the VSCode Remote Container environment provided.
+    Deployment and Scaling:
+        Deployed PostgreSQL as a managed service in OpenShift for database operations.
+        Configured Kubernetes resources such as Deployments, Services, and Ingress controllers to manage microservice deployments.
+        Set up horizontal pod autoscaling to handle varying loads.
 
-1. Bring up a local K3D Kubernetes cluster
+    Monitoring and Logging:
+        Integrated monitoring tools like Prometheus and Grafana to track the health and performance of microservices.
+        Set up centralized logging with ELK Stack (Elasticsearch, Logstash, Kibana) to collect and analyze logs.
 
-    ```bash
-    $ make cluster
-    ```
+# Outcomes:
 
-2. Install Tekton
+    Efficiency: The automated CI/CD pipeline significantly reduced manual intervention, leading to faster and more reliable deployments.
+    Quality: Automated testing and code quality checks ensured that only high-quality code was deployed to production.
+    Scalability: The microservices architecture and Kubernetes orchestration provided the ability to scale services independently based on demand.
+    Reliability: Continuous monitoring and centralized logging improved the ability to detect and respond to issues promptly.
 
-    ```bash
-    $ make tekton
-    ```
+# Challenges and Solutions:
 
-3. Install the ClusterTasks that the Cloud IDE has
+    Integration Issues: Initial challenges in integrating GitHub Actions with OpenShift Pipelines were resolved by custom scripts and detailed documentation.
+    Environment Consistency: Ensured consistent environments across development, staging, and production by using Infrastructure as Code (IaC) tools like Terraform.
 
-    ```bash
-    $ make clustertasks
-    ```
+Conclusion:
+This project successfully demonstrated the implementation of a robust CI/CD pipeline for a microservices-based application, leveraging GitHub Actions and OpenShift Pipelines. The streamlined processes and automated workflows significantly enhanced the development and deployment lifecycle, ensuring high-quality, scalable, and reliable software delivery.
 
-You can now perform Tekton development locally, just like in the Cloud IDE lab environment.
 
-## Author
+## Development Environment
 
-[John Rofrano](https://www.coursera.org/instructor/johnrofrano), Senior Technical Staff Member, DevOps Champion, @ IBM Research, and Instructor @ Coursera
+Visual Studio Code, IBM Cloud
+
+This will install Python 3.9, make it the default, modify the bash prompt, create a Python virtual environment and activate it.
+
+After sourcing it you prompt should look like this:
+
+## Authors
+
+[ Elvis Owusu-Sekyere, Smith Mebawondu, Obinna Domnic]
 
 ## License
 
 Licensed under the Apache License. See [LICENSE](LICENSE)
 
-## <h3 align="center"> © IBM Corporation 2022. All rights reserved. <h3/>
+
